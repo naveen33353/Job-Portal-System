@@ -1,0 +1,46 @@
+<div class="page">
+<app-header variant="seeker"></app-header>
+<div class="app-shell">
+<app-sidebar variant="seeker"></app-sidebar>
+<main class="main">
+
+<div class="page-title"> Welcome back, {{seeker?.firstName }}</div>
+<div class="page-sub">Here's where your search stands.</div>
+<div style="margin-bottom:24px;"><a routerLink="/job/all-jobs" class="btn btn-primary">Browse jobs</a></div>
+<div class="card-row-3" style="margin-bottom:32px;">
+  <div class="stat-card"><div class="n">{{ totalApplications }}</div><div class="l">Applications sent</div></div>
+  <div class="stat-card"><div class="n">{{ pendingCount }}</div><div class="l">Pending review</div><span class="sub">in progress</span></div>
+  <div class="stat-card"><div class="n">{{ approvedCount }}</div><div class="l">Approved</div><span class="sub">&uarr; offers</span></div>
+</div>
+<div class="card-row-3" style="margin-bottom:32px;grid-template-columns:1fr;max-width:220px;">
+  <div class="stat-card"><div class="n">{{ savedJobsCount }}</div><div class="l">Saved jobs</div></div>
+</div>
+<div class="section-head"><h2>Recent applications</h2></div>
+<div class="table-wrap" style="margin-bottom:32px;">
+  <table>
+    <thead><tr><th>Role</th><th>Company</th><th>Applied</th><th>Status</th></tr></thead>
+    <tbody>
+      <tr *ngFor="let app of recentApplications">
+        <td>{{ app.jobTitle }}</td>
+        <td>{{ app.companyName }}</td>
+        <td>{{ app.appliedDate | date }}</td>
+        <td><span class="chip" [ngClass]="statusChipClass(app.status)">{{ app.status }}</span></td>
+      </tr>
+      <tr *ngIf="recentApplications.length === 0">
+        <td colspan="4" style="text-align:center;color:var(--muted);padding:24px;">No applications yet — <a routerLink="/job/all-jobs">browse open roles</a>.</td>
+      </tr>
+    </tbody>
+  </table>
+</div>
+<div class="section-head"><h2>Recommended for your skills</h2></div>
+<div class="card-row">
+  <div class="job-card" *ngFor="let job of recommendedJobs" [routerLink]="['/job/view-job', job.jobId]" style="cursor:pointer;">
+    <div class="top"><h3 style="font-size:15px;">{{ job.jobTitle }}</h3><span class="chip chip-open" *ngIf="job.active">Open</span></div>
+    <div class="meta">{{ job.companyName }} &middot; {{ job.location }}</div>
+  </div>
+  <p *ngIf="recommendedJobs.length === 0" class="muted" style="font-size:13px;">No open roles right now — check back soon.</p>
+</div>
+
+</main>
+</div>
+</div>

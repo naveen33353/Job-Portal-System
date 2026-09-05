@@ -1,0 +1,38 @@
+<div class="page">
+<app-header variant="seeker"></app-header>
+<div class="app-shell">
+<app-sidebar variant="seeker"></app-sidebar>
+<main class="main">
+
+<div class="page-title">My Applications</div>
+<div class="table-wrap">
+  <table>
+    <thead>
+      <tr>
+        <th>Role</th>
+        <th>Company</th>
+        <th>Applied On</th>
+        <th>Status</th>
+        <th></th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr *ngFor="let app of allApplications">
+        <td>{{app.jobTitle}}</td>
+        <td>{{app.companyName}}</td>
+        <td>{{app.appliedDate | date}}</td>
+        <td><span class="chip" [ngClass]="{
+              'chip-pending': app.status === 'PENDING',
+              'chip-approved': app.status === 'APPROVED',
+              'chip-rejected': app.status === 'REJECTED',
+              'chip-canceled': app.status === 'CANCELED',
+              'chip-completed': app.status === 'COMPLETED'}">{{app.status}}</span></td>
+        <td class="actions"><a [routerLink]="['/application/jobseeker-applications', app.id]">View</a></td>
+      </tr>
+    </tbody>
+  </table>
+</div>
+
+</main>
+</div>
+</div>

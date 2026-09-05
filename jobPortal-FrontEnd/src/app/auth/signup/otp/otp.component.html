@@ -1,0 +1,67 @@
+<div class="page">
+<app-header variant="guest"></app-header>
+
+<div class="auth-wrap">
+  <div class="auth-card" *ngIf="step === 'DETAILS'">
+    <h2>Create your account (OTP verified)</h2>
+    <p class="muted" style="font-size:13px;margin-bottom:14px;">We'll email you a 6-digit code to confirm it's really you.</p>
+
+    <div class="filter-group">
+      <span class="lbl">I am a&hellip;</span>
+      <span class="chip-choice" [class.selected]="role === 'JOBSEEKER'" (click)="selectRole('JOBSEEKER')">Job Seeker</span>
+      <span class="chip-choice" [class.selected]="role === 'COMPANY'" (click)="selectRole('COMPANY')">Company</span>
+    </div>
+
+    <form [formGroup]="detailsForm" (ngSubmit)="submitDetails()">
+      <ng-container *ngIf="role === 'JOBSEEKER'">
+        <div class="card-row">
+          <div class="field"><label>First name</label><input formControlName="firstName" placeholder="Aditi"></div>
+          <div class="field"><label>Last name</label><input formControlName="lastName" placeholder="Menon"></div>
+        </div>
+        <div class="field"><label>Primary skills</label><input formControlName="skills" placeholder="Java, React"></div>
+      </ng-container>
+
+      <ng-container *ngIf="role === 'COMPANY'">
+        <div class="field"><label>Company name</label><input formControlName="companyName" placeholder="Nimbus Cloud"></div>
+        <div class="field"><label>Website</label><input formControlName="website" placeholder="nimbuscloud.io"></div>
+        <div class="field"><label>Industry</label><input formControlName="industry" placeholder="Software"></div>
+        <div class="field"><label>Description</label><textarea formControlName="description" placeholder="What does the company do?"></textarea></div>
+      </ng-container>
+
+      <div class="field"><label>Email</label><input formControlName="email" type="email" placeholder="you@email.com"></div>
+      <div class="field"><label>Location</label><input formControlName="location" placeholder="Kochi, IN"></div>
+      <div class="card-row">
+        <div class="field"><label>Password</label><input formControlName="password" type="password" placeholder="&bull;&bull;&bull;&bull;&bull;&bull;&bull;&bull;"></div>
+        <div class="field"><label>Confirm password</label><input formControlName="confirmPassword" type="password" placeholder="&bull;&bull;&bull;&bull;&bull;&bull;&bull;&bull;"></div>
+      </div>
+
+      <p class="muted" style="color:var(--rose);font-size:13px;margin-bottom:10px;" *ngIf="errorMessage">{{ errorMessage }}</p>
+
+      <button class="btn btn-primary btn-block" type="submit" [disabled]="submitting">{{ submitting ? 'Sending OTP…' : 'Send OTP' }}</button>
+    </form>
+
+    <p class="muted" style="font-size:13px;margin-top:14px;">Prefer the regular sign up? <a routerLink="/auth/register">Go back</a></p>
+  </div>
+
+  <div class="auth-card" *ngIf="step === 'OTP'">
+    <h2>Verify your email</h2>
+    <p class="muted" style="font-size:13px;margin-bottom:14px;">Enter the 6-digit code we sent to {{ detailsForm.value.email }}.</p>
+
+    <form [formGroup]="otpForm" (ngSubmit)="verify()">
+      <div class="field"><label>OTP</label><input formControlName="otp" maxlength="6" placeholder="482913"></div>
+
+      <p class="muted" style="font-size:13px;margin-bottom:10px;" *ngIf="infoMessage">{{ infoMessage }}</p>
+      <p class="muted" style="color:var(--rose);font-size:13px;margin-bottom:10px;" *ngIf="errorMessage">{{ errorMessage }}</p>
+
+      <button class="btn btn-primary btn-block" type="submit" [disabled]="submitting">{{ submitting ? 'Verifying…' : 'Verify & create account' }}</button>
+    </form>
+
+    <div style="display:flex;justify-content:space-between;margin-top:14px;">
+      <a (click)="backToDetails()" style="cursor:pointer;font-size:13px;">&larr; Edit details</a>
+      <a (click)="resend()" style="cursor:pointer;font-size:13px;">Resend OTP</a>
+    </div>
+  </div>
+</div>
+
+<app-footer></app-footer>
+</div>

@@ -1,0 +1,43 @@
+<div class="page">
+<app-header variant="guest"></app-header>
+<main class="content">
+<section class="section-pad">
+  <div class="wrap">
+    <div class="section-head">
+      <h2>{{filteredCompanies.length}} compan{{filteredCompanies.length === 1 ? 'y' : 'ies'}} hiring</h2>
+      <input type="text" [(ngModel)]="searchTerm" placeholder="Search companies" style="padding:10px 14px;border:1px solid var(--line);border-radius:8px;width:240px;">
+    </div>
+    <div class="table-wrap">
+      <table>
+        <thead>
+          <tr>
+            <th>Company</th>
+            <th>Location</th>
+            <th>Open Roles</th>
+            <th>Website</th>
+            <th></th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr *ngFor="let comp of filteredCompanies">
+            <td>{{ comp.companyName }}</td>
+            <td>{{ comp.location }}</td>
+            <td>{{ comp.jobs?.length || 0 }}</td>
+            <td>{{ comp.website }}</td>
+            <td class="actions">
+              <a [routerLink]="['../company', comp.companyId]">View</a>
+            </td>
+          </tr>
+          <tr *ngIf="filteredCompanies.length === 0">
+            <td colspan="5" style="text-align:center;color:var(--muted);padding:24px;">No companies match your search.</td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+  </div>
+</section>
+</main>
+
+
+<app-footer></app-footer>
+</div>

@@ -1,0 +1,34 @@
+<div class="page">
+<app-header variant="company"></app-header>
+<div class="app-shell">
+<app-sidebar variant="company"></app-sidebar>
+<main class="main">
+
+<div class="breadcrumb">Applicants / <span>{{app?.jobSeekerName}}</span></div>
+<div class="page-title">Review application</div>
+<div class="page-sub">{{app?.jobSeekerName}} &middot; {{app?.jobTitle}} &middot; Applied on {{app?.appliedDate}} &nbsp; <span
+      class="chip"
+      [ngClass]="{
+        'chip-open': app?.status === 'APPROVED',
+        'chip-rejected': app?.status === 'REJECTED',
+        'chip-pending': app?.status === 'PENDING'
+      }">
+      {{ app?.status }}
+    </span></div>
+<div class="card" style="max-width:560px;">
+  <h3 style="font-size:14px;margin-bottom:4px;">Set decision</h3>
+  <p class="muted" style="font-size:13px;margin-bottom:16px;">This updates the application's status.</p>
+  <div style="display:flex;gap:8px;flex-wrap:wrap;">
+    <button (click)="approveApplication()" class="btn btn-primary btn-sm" style="background:var(--sage);color:#fff;">Approve</button>
+    <button (click)="rejectApplication()" class="btn btn-primary btn-sm" style="background:var(--rose);color:#fff;">Reject</button>
+  </div>
+  <div class="timeline">
+    <div class="timeline-item">
+      Application received, status set to {{ app?.status }}
+    </div>
+  </div>
+</div>
+
+</main>
+</div>
+</div>

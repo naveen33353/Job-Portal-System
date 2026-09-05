@@ -1,0 +1,104 @@
+<div class="page">
+<app-header variant="admin"></app-header>
+<div class="app-shell">
+<app-sidebar variant="admin"></app-sidebar>
+<main class="main-wide">
+
+<div class="page-title">All Jobs</div>
+<div class="page-sub">Moderate listings, close expired roles, and respond to flagged posts.</div>
+
+<div class="card-row-3" style="margin-bottom:24px;">
+  <div class="stat-card"><div class="n">{{ totalJobs | number }}</div><div class="l">Total jobs</div></div>
+  <div class="stat-card"><div class="n">{{ openCount }}</div><div class="l">Open</div><span class="sub">accepting applications</span></div>
+  <div class="stat-card"><div class="n">{{ closedCount }}</div><div class="l">Closed</div><span class="sub">filled or expired</span></div>
+</div>
+<div class="card-row-3" style="margin-bottom:32px;grid-template-columns:1fr 1fr;max-width:480px;">
+  <div class="stat-card"><div class="n">{{ flaggedCount }}</div><div class="l">Flagged</div><span class="sub">needs review</span></div>
+  <div class="stat-card"><div class="n">41</div><div class="l">Posted this week</div></div>
+</div>
+
+<div class="tab-row">
+  <span class="tab" [class.active]="statusFilter === 'ALL'" (click)="setStatusFilter('ALL')" style="cursor:pointer;">All ({{ totalJobs }})</span>
+  <span class="tab" [class.active]="statusFilter === 'OPEN'" (click)="setStatusFilter('OPEN')" style="cursor:pointer;">Open ({{ openCount }})</span>
+  <span class="tab" [class.active]="statusFilter === 'CLOSED'" (click)="setStatusFilter('CLOSED')" style="cursor:pointer;">Closed ({{ closedCount }})</span>
+  <span class="tab" [class.active]="statusFilter === 'FLAGGED'" (click)="setStatusFilter('FLAGGED')" style="cursor:pointer;">Flagged ({{ flaggedCount }})</span>
+</div>
+
+<div class="section-head" style="margin-top:16px;">
+  <h2>Job listings</h2>
+  <div style="display:flex;gap:10px;align-items:center;">
+    <select [(ngModel)]="selectedCategory" style="padding:10px 14px;border:1px solid var(--line);border-radius:8px;background:var(--paper);">
+      <option *ngFor="let type of jobTypes" [value]="type">{{ type }}</option>
+    </select>
+    <input type="text" [(ngModel)]="searchTerm" placeholder="Search by title or company" style="padding:10px 14px;border:1px solid var(--line);border-radius:8px;width:240px;">
+  </div>
+</div>
+
+<div class="table-wrap">
+  <table>
+    <thead>
+      <tr>
+        <th><input type="checkbox" (change)="toggleAll($event)"></th>
+        <th>Role</th>
+        <th>Company</th>
+        <th>Posted</th>
+        <th>Applicants</th>
+        <th>Status</th>
+        <th></th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr *ngFor="let j of filteredRows">
+        <td><input type="checkbox" [checked]="selected.has(j.jobId)" (change)="toggle(j.jobId)"></td>
+        <td>{{ j.jobTitle }}</td>
+        <td>{{ j.companyName }}</td>
+        <td>{{ j.postedAgo }}</td>
+        <td>{{ j.applicantCount }}</td>
+        <td>
+          <span class="chip"
+                [ngClass]="{
+                  'chip-open': j.status === 'OPEN',
+                  'chip-closed': j.status === 'CLOSED',
+                  'chip-pending': j.status === 'FLAGGED'
+                }">{{ j.status }}</span>
+        </td>
+        <td class="actions">
+          <a [routerLink]="['/job/view-job', j.jobId]">View</a>
+          <a [routerLink]="['/admin/applications']" [queryParams]="{ jobId: j.jobId }">Applicants</a>
+          <a *ngIf="j.status === 'OPEN'"     href="javascript:void(0)" (click)="close(j)">Close</a>
+          <a *ngIf="j.status === 'CLOSED'"   href="javascript:void(0)" (click)="reopen(j)">Reopen</a>
+          <a *ngIf="j.status === 'FLAGGED'"  href="javascript:void(0)" (click)="approve(j)">Approve</a>
+          <a href="javascript:void(0)" class="danger" (click)="deleteRow(j)">Delete</a>
+        </td>
+      </tr>
+      <tr *ngIf="filteredRows.length === 0">
+        <td colspan="7" class="muted" style="text-align:center;padding:24px;">No jobs match your filters.</td>
+      </tr>
+    </tbody>
+  </table>
+</div>
+
+<div style="display:flex;justify-content:space-between;align-items:center;margin-top:20px;font-size:13px;color:var(--muted);">
+  <div>Showing {{ filteredRows.length }} of {{ totalJobs }}</div>
+  <div style="display:flex;gap:8px;align-items:center;">
+    <button class="btn btn-secondary btn-sm">Previous</button>
+    <span>Page 1</span>
+    <button class="btn btn-secondary btn-sm">Next</button>
+  </div>
+</div>
+
+<div class="card" style="margin-top:32px;">
+  <h3 style="font-size:14px;margin-bottom:12px;">Bulk actions</h3>
+  <p class="muted" style="font-size:13px;margin-bottom:12px;">
+    {{ selected.size }} selected. Useful when reviewing flagged posts in batches.
+  </p>
+  <div style="display:flex;gap:10px;">
+    <button class="btn btn-secondary btn-sm" (click)="bulkClose()">Close selected</button>
+    <button class="btn btn-secondary btn-sm" (click)="bulkReopen()">Reopen selected</button>
+    <button class="btn btn-outline-danger btn-sm" (click)="bulkDelete()">Delete selected</button>
+  </div>
+</div>
+
+</main>
+</div>
+</div>

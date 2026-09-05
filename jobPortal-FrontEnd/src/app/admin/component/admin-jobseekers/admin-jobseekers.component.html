@@ -1,0 +1,106 @@
+<div class="page">
+<app-header variant="admin"></app-header>
+<div class="app-shell">
+<app-sidebar variant="admin"></app-sidebar>
+<main class="main-wide">
+
+<div class="page-title">Job Seekers</div>
+<div class="page-sub">Manage candidate accounts, review activity, and resolve support tickets.</div>
+
+<div class="card-row-3" style="margin-bottom:24px;">
+  <div class="stat-card"><div class="n">{{ totalSeekers | number }}</div><div class="l">Total seekers</div></div>
+  <div class="stat-card"><div class="n">{{ activeSeekers | number }}</div><div class="l">Active</div><span class="sub">logged in 30d</span></div>
+  <div class="stat-card"><div class="n">{{ dormantSeekers | number }}</div><div class="l">Dormant</div><span class="sub">90d+ inactive</span></div>
+</div>
+<div class="card-row-3" style="margin-bottom:32px;grid-template-columns:1fr 1fr 1fr;max-width:720px;">
+  <div class="stat-card"><div class="n">142</div><div class="l">New this week</div></div>
+  <div class="stat-card"><div class="n">{{ suspendedSeekers }}</div><div class="l">Suspended</div></div>
+  <div class="stat-card"><div class="n">{{ reportedSeekers }}</div><div class="l">Open reports</div></div>
+</div>
+
+<div class="tab-row">
+  <span class="tab" [class.active]="statusFilter === 'ALL'" (click)="setStatusFilter('ALL')" style="cursor:pointer;">All ({{ totalSeekers }})</span>
+  <span class="tab" [class.active]="statusFilter === 'ACTIVE'" (click)="setStatusFilter('ACTIVE')" style="cursor:pointer;">Active ({{ activeSeekers }})</span>
+  <span class="tab" [class.active]="statusFilter === 'SUSPENDED'" (click)="setStatusFilter('SUSPENDED')" style="cursor:pointer;">Suspended ({{ suspendedSeekers }})</span>
+  <span class="tab" [class.active]="statusFilter === 'REPORTED'" (click)="setStatusFilter('REPORTED')" style="cursor:pointer;">Reported ({{ reportedSeekers }})</span>
+</div>
+
+<div class="section-head" style="margin-top:16px;">
+  <h2>Job seeker directory</h2>
+  <div style="display:flex;gap:10px;align-items:center;">
+    <select [(ngModel)]="selectedLocation" style="padding:10px 14px;border:1px solid var(--line);border-radius:8px;background:var(--paper);">
+      <option *ngFor="let loc of locations" [value]="loc">{{ loc }}</option>
+    </select>
+    <input type="text" [(ngModel)]="searchTerm" placeholder="Search by name or email" style="padding:10px 14px;border:1px solid var(--line);border-radius:8px;width:240px;">
+  </div>
+</div>
+
+<div class="table-wrap">
+  <table>
+    <thead>
+      <tr>
+        <th><input type="checkbox" (change)="toggleAll($event)"></th>
+        <th>Name</th>
+        <th>Email</th>
+        <th>Location</th>
+        <th>Joined</th>
+        <th>Applications</th>
+        <th>Status</th>
+        <th></th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr *ngFor="let s of filteredRows">
+        <td><input type="checkbox" [checked]="selected.has(s.id)" (change)="toggle(s.id)"></td>
+        <td>{{ s.firstName }} {{ s.lastName }}</td>
+        <td>{{ s.email }}</td>
+        <td>{{ s.location }}</td>
+        <td>{{ s.joined }}</td>
+        <td>{{ s.applications }}</td>
+        <td>
+          <span class="chip"
+                [ngClass]="{
+                  'chip-approved': s.status === 'ACTIVE',
+                  'chip-rejected': s.status === 'SUSPENDED',
+                  'chip-pending': s.status === 'REPORTED'
+                }">{{ s.status }}</span>
+        </td>
+        <td class="actions">
+          <a [routerLink]="['/admin/jobseekers', s.id]">View</a>
+          <a *ngIf="s.status === 'ACTIVE'"   href="javascript:void(0)" (click)="suspend(s)">Suspend</a>
+          <a *ngIf="s.status === 'SUSPENDED'" href="javascript:void(0)" (click)="reinstate(s)">Reinstate</a>
+          <a *ngIf="s.status === 'REPORTED'" href="javascript:void(0)" (click)="resolveReport(s)">Resolve</a>
+          <a href="javascript:void(0)" class="danger" (click)="deleteRow(s)">Delete</a>
+        </td>
+      </tr>
+      <tr *ngIf="filteredRows.length === 0">
+        <td colspan="8" class="muted" style="text-align:center;padding:24px;">No seekers match your filters.</td>
+      </tr>
+    </tbody>
+  </table>
+</div>
+
+<div style="display:flex;justify-content:space-between;align-items:center;margin-top:20px;font-size:13px;color:var(--muted);">
+  <div>Showing {{ filteredRows.length }} of {{ totalSeekers }}</div>
+  <div style="display:flex;gap:8px;align-items:center;">
+    <button class="btn btn-secondary btn-sm">Previous</button>
+    <span>Page 1</span>
+    <button class="btn btn-secondary btn-sm">Next</button>
+  </div>
+</div>
+
+<div class="card" style="margin-top:32px;">
+  <h3 style="font-size:14px;margin-bottom:12px;">Bulk actions</h3>
+  <p class="muted" style="font-size:13px;margin-bottom:12px;">
+    {{ selected.size }} selected. Apply moderation actions to multiple accounts at once.
+  </p>
+  <div style="display:flex;gap:10px;">
+    <button class="btn btn-secondary btn-sm" (click)="bulkEmail()">Email selected</button>
+    <button class="btn btn-secondary btn-sm" (click)="bulkSuspend()">Suspend selected</button>
+    <button class="btn btn-outline-danger btn-sm" (click)="bulkDelete()">Delete selected</button>
+  </div>
+</div>
+
+</main>
+</div>
+</div>

@@ -1,0 +1,22 @@
+<div class="page">
+<app-header variant="guest"></app-header>
+
+<div class="auth-wrap">
+  <div class="auth-card" style="max-width:460px;">
+    <h2>Join HireHub as&hellip;</h2>
+    <div class="role-cards">
+      <div class="role-card">
+        <div><h3>Job Seeker</h3><p>Search roles, apply, and track every application.</p></div>
+        <a routerLink="/auth/register/seeker" class="btn btn-primary btn-sm">Continue</a>
+      </div>
+      <div class="role-card">
+        <div><h3>Company</h3><p>Post roles and review incoming applicants.</p></div>
+        <a routerLink="/auth/register/company" class="btn btn-secondary btn-sm">Continue</a>
+      </div>
+    </div>
+    <p class="muted" style="font-size:13px;margin-top:16px;text-align:center;">Prefer an OTP-verified sign up? <a routerLink="/auth/register/otp">Use email OTP</a></p>
+  </div>
+</div>
+
+<app-footer></app-footer>
+</div>

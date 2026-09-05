@@ -1,0 +1,52 @@
+<div class="page">
+<app-header variant="company"></app-header>
+<div class="app-shell">
+<app-sidebar variant="company"></app-sidebar>
+<main class="main">
+
+<div class="page-title">Post a New Job</div>
+<div class="form-card">
+<form [formGroup]="postForm" (ngSubmit)="submit()">
+
+  <div class="field">
+    <label>Job Title</label>
+    <input formControlName="jobTitle" placeholder="Job Title">
+  </div>
+
+  <div class="field">
+    <label>Description</label>
+    <textarea formControlName="description"></textarea>
+  </div>
+
+  <div class="field">
+    <label>Experience Required</label>
+    <input formControlName="experience">
+  </div>
+
+  <div class="field">
+    <label>Salary</label>
+    <input formControlName="salary">
+  </div>
+
+  <div class="field">
+    <label>Application Deadline</label>
+    <input type="date" formControlName="endDate">
+  </div>
+
+  <div class="field">
+    <label>Required Skills</label>
+    <input formControlName="skills">
+  </div>
+
+  <div class="form-actions">
+    <button type="submit" class="btn btn-primary">
+      Publish Job
+    </button>
+  </div>
+
+</form>
+</div>
+
+</main>
+</div>
+</div>

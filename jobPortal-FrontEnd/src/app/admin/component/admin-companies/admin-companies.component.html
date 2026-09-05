@@ -1,0 +1,108 @@
+<div class="page">
+<app-header variant="admin"></app-header>
+<div class="app-shell">
+<app-sidebar variant="admin"></app-sidebar>
+<main class="main-wide">
+
+<div class="page-title">Companies</div>
+<div class="page-sub">Approve, suspend, or remove employers on the platform.</div>
+
+<div class="card-row-3" style="margin-bottom:24px;">
+  <div class="stat-card"><div class="n">{{ totalCompanies | number }}</div><div class="l">Total companies</div></div>
+  <div class="stat-card"><div class="n">{{ activeCount }}</div><div class="l">Active</div><span class="sub">verified</span></div>
+  <div class="stat-card"><div class="n">{{ pendingCount }}</div><div class="l">Pending review</div><span class="sub">awaiting approval</span></div>
+</div>
+<div class="card-row-3" style="margin-bottom:32px;grid-template-columns:1fr 1fr;max-width:480px;">
+  <div class="stat-card"><div class="n">{{ suspendedCount }}</div><div class="l">Suspended</div></div>
+  <div class="stat-card"><div class="n">23</div><div class="l">Suspended this month</div></div>
+</div>
+
+<div class="tab-row">
+  <span class="tab" [class.active]="statusFilter === 'ALL'" (click)="setStatusFilter('ALL')" style="cursor:pointer;">All ({{ totalCompanies }})</span>
+  <span class="tab" [class.active]="statusFilter === 'ACTIVE'" (click)="setStatusFilter('ACTIVE')" style="cursor:pointer;">Active ({{ activeCount }})</span>
+  <span class="tab" [class.active]="statusFilter === 'PENDING'" (click)="setStatusFilter('PENDING')" style="cursor:pointer;">Pending ({{ pendingCount }})</span>
+  <span class="tab" [class.active]="statusFilter === 'SUSPENDED'" (click)="setStatusFilter('SUSPENDED')" style="cursor:pointer;">Suspended ({{ suspendedCount }})</span>
+</div>
+
+<div class="section-head" style="margin-top:16px;">
+  <h2>Company directory</h2>
+  <div style="display:flex;gap:10px;align-items:center;">
+    <select [(ngModel)]="selectedLocation" style="padding:10px 14px;border:1px solid var(--line);border-radius:8px;background:var(--paper);">
+      <option *ngFor="let loc of locations" [value]="loc">{{ loc }}</option>
+    </select>
+    <input type="text" [(ngModel)]="searchTerm" placeholder="Search by name or email" style="padding:10px 14px;border:1px solid var(--line);border-radius:8px;width:240px;">
+  </div>
+</div>
+
+<div class="table-wrap">
+  <table>
+    <thead>
+      <tr>
+        <th><input type="checkbox" (change)="toggleAll($event)"></th>
+        <th>Company</th>
+        <th>Email</th>
+        <th>Location</th>
+        <th>Joined</th>
+        <th>Jobs</th>
+        <th>Status</th>
+        <th></th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr *ngFor="let c of filteredRows">
+        <td><input type="checkbox" [checked]="selected.has(c.companyId)" (change)="toggle(c.companyId)"></td>
+        <td>{{ c.companyName }}</td>
+        <td>{{ c.email }}</td>
+        <td>{{ c.location }}</td>
+        <td>{{ c.joined }}</td>
+        <td>{{ c.jobsPosted }}</td>
+        <td>
+          <span class="chip"
+                [ngClass]="{
+                  'chip-approved': c.status === 'ACTIVE',
+                  'chip-pending': c.status === 'PENDING',
+                  'chip-rejected': c.status === 'SUSPENDED'
+                }">
+            {{ c.status === 'ACTIVE' ? 'Active' : c.status === 'PENDING' ? 'Pending' : 'Suspended' }}
+          </span>
+        </td>
+        <td class="actions">
+          <a [routerLink]="['/company/company', c.companyId]">View</a>
+          <a *ngIf="c.status === 'ACTIVE'"   href="javascript:void(0)" (click)="suspend(c)">Suspend</a>
+          <a *ngIf="c.status === 'SUSPENDED'" href="javascript:void(0)" (click)="reinstate(c)">Reinstate</a>
+          <a *ngIf="c.status === 'PENDING'"  href="javascript:void(0)" (click)="approve(c)">Approve</a>
+          <a *ngIf="c.status === 'PENDING'"  href="javascript:void(0)" class="danger" (click)="reject(c)">Reject</a>
+          <a href="javascript:void(0)" class="danger" (click)="deleteRow(c)">Delete</a>
+        </td>
+      </tr>
+      <tr *ngIf="filteredRows.length === 0">
+        <td colspan="8" class="muted" style="text-align:center;padding:24px;">No companies match your filters.</td>
+      </tr>
+    </tbody>
+  </table>
+</div>
+
+<div style="display:flex;justify-content:space-between;align-items:center;margin-top:20px;font-size:13px;color:var(--muted);">
+  <div>Showing {{ filteredRows.length }} of {{ totalCompanies }}</div>
+  <div style="display:flex;gap:8px;align-items:center;">
+    <button class="btn btn-secondary btn-sm">Previous</button>
+    <span>Page 1</span>
+    <button class="btn btn-secondary btn-sm">Next</button>
+  </div>
+</div>
+
+<div class="card" style="margin-top:32px;">
+  <h3 style="font-size:14px;margin-bottom:12px;">Bulk actions</h3>
+  <p class="muted" style="font-size:13px;margin-bottom:12px;">
+    {{ selected.size }} selected. Apply actions to multiple companies at once.
+  </p>
+  <div style="display:flex;gap:10px;">
+    <button class="btn btn-secondary btn-sm" (click)="bulkApprove()">Approve selected</button>
+    <button class="btn btn-secondary btn-sm" (click)="bulkSuspend()">Suspend selected</button>
+    <button class="btn btn-outline-danger btn-sm" (click)="bulkDelete()">Delete selected</button>
+  </div>
+</div>
+
+</main>
+</div>
+</div>

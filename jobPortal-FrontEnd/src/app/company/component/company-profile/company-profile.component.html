@@ -1,0 +1,32 @@
+<div class="page">
+<app-header variant="company"></app-header>
+<div class="app-shell">
+<app-sidebar variant="company"></app-sidebar>
+<main class="main">
+
+<div style="display:flex;justify-content:space-between;align-items:flex-start;margin-bottom:24px;">
+  <div style="display:flex;gap:16px;align-items:center;">
+    <div class="avatar" style="width:52px;height:52px;font-size:16px;" *ngIf="company?.companyName">
+      {{ company.companyName.charAt(0) }}{{ company.companyName.split(' ')[1]?.charAt(0) || '' }}
+    </div>
+    <div><h2 style="font-size:20px;">{{company?.companyName}}</h2><p class="muted" style="font-size:13.5px;">{{company?.location}}</p></div>
+  </div>
+  <a [routerLink]="['/company/company/edit', company?.companyId]" class="btn btn-secondary btn-sm">Edit profile</a>
+</div>
+<div class="card" style="margin-bottom:16px;">
+  <h3 style="font-size:14px;margin-bottom:8px;">Connect with us</h3>
+  <p style="font-size:13.5px;">{{company?.website}}</p>
+</div>
+<div class="card" style="margin-bottom:16px;">
+  <h3 style="font-size:14px;margin-bottom:8px;">Description</h3>
+  <p style="font-size:13.5px;">{{company?.description}}</p>
+</div>
+<div class="card">
+  <h3 style="font-size:14px;margin-bottom:8px;">Public preview</h3>
+  <p class="muted" style="font-size:13px;margin-bottom:12px;">This is what job seekers see on your public company page.</p>
+  <a [routerLink]="['/company/company', company?.companyId]" class="btn btn-secondary">View public profile</a>
+</div>
+
+</main>
+</div>
+</div>

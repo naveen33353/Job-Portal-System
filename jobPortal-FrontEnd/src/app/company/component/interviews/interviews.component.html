@@ -1,0 +1,39 @@
+<div class="page">
+<app-header variant="company"></app-header>
+<div class="app-shell">
+<app-sidebar variant="company"></app-sidebar>
+<main class="main-wide">
+
+<div class="section-head"><h2>Interviews</h2></div>
+<div class="tab-row">
+  <span class="tab" [class.active]="activeTab === 'ALL'" (click)="setTab('ALL')">All</span>
+  <span class="tab" [class.active]="activeTab === 'SCHEDULED'" (click)="setTab('SCHEDULED')">Scheduled</span>
+  <span class="tab" [class.active]="activeTab === 'COMPLETED'" (click)="setTab('COMPLETED')">Completed</span>
+  <span class="tab" [class.active]="activeTab === 'CANCELLED'" (click)="setTab('CANCELLED')">Cancelled</span>
+</div>
+
+<div class="table-wrap">
+  <table>
+    <thead><tr><th>Candidate</th><th>Role</th><th>Scheduled</th><th>Mode</th><th>Status</th><th></th></tr></thead>
+    <tbody>
+      <tr *ngFor="let iv of filteredInterviews">
+        <td>{{ iv.jobSeekerName }}</td>
+        <td>{{ iv.jobTitle }}</td>
+        <td>{{ iv.scheduledAt | date:'medium' }}</td>
+        <td>{{ iv.mode }}</td>
+        <td><span class="chip" [ngClass]="statusChipClass(iv.status)">{{ iv.status }}</span></td>
+        <td class="actions">
+          <a [routerLink]="['/company/company/applicant', iv.applicationId]">View</a>
+          <a (click)="cancelInterview(iv.id)" style="cursor:pointer;" *ngIf="iv.status === 'SCHEDULED' || iv.status === 'RESCHEDULED'">Cancel</a>
+        </td>
+      </tr>
+      <tr *ngIf="filteredInterviews.length === 0">
+        <td colspan="6" style="text-align:center;color:var(--muted);padding:24px;">No interviews here yet.</td>
+      </tr>
+    </tbody>
+  </table>
+</div>
+
+</main>
+</div>
+</div>

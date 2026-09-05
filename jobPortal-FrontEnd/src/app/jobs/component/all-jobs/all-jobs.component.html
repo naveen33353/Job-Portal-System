@@ -1,0 +1,56 @@
+<div class="page">
+<app-header variant="guest"></app-header>
+<main class="content">
+<section class="section-pad">
+  <div class="wrap">
+    <div class="section-head">
+      <h2>{{filteredJobs.length}} open role{{filteredJobs.length === 1 ? '' : 's'}}</h2>
+      <input type="text" [(ngModel)]="searchTerm" placeholder="Search by keyword" style="padding:10px 14px;border:1px solid var(--line);border-radius:8px;width:280px;">
+    </div>
+    <div class="browse-grid">
+      <div class="filters">
+        <h4>Filters</h4>
+        <div class="filter-group"><span class="lbl">Location</span>
+          <select [(ngModel)]="selectedLocation">
+            <option *ngFor="let loc of locations" [value]="loc">{{ loc }}</option>
+          </select>
+        </div>
+        <div class="filter-group"><span class="lbl">Experience</span>
+          <select [(ngModel)]="selectedExperience">
+            <option *ngFor="let exp of experienceLevels" [value]="exp">{{ exp }}</option>
+          </select>
+        </div>
+        <div class="filter-group" *ngIf="availableSkills.length">
+          <span class="lbl">Skills</span>
+          <span *ngFor="let skill of availableSkills"
+                class="chip-choice"
+                [class.selected]="selectedSkills.has(skill)"
+                (click)="toggleSkill(skill)"
+                style="cursor:pointer;">{{ skill }}</span>
+        </div>
+        <button class="btn btn-primary btn-block" (click)="clearFilters()">Clear filters</button>
+      </div>
+      <div class="table-wrap">
+        <table>
+          <thead><tr><th>Role</th><th>Company</th><th>Location</th><th>Salary</th><th>Status</th><th></th></tr></thead>
+          <tbody>
+            <tr *ngFor="let job of filteredJobs">
+              <td>{{job.jobTitle}}</td>
+              <td>{{job.companyName}}</td>
+              <td>{{job.location}}</td>
+              <td>&#8377;{{job.salary}}</td>
+              <td><span class="chip" [ngClass]="job.active ? 'chip-open' : 'chip-closed'">{{ job.active ? 'Open' : 'Closed' }}</span></td>
+              <td class="actions"><a [routerLink]="['/job/view-job', job.jobId]">View</a></td>
+            </tr>
+            <tr *ngIf="filteredJobs.length === 0">
+              <td colspan="6" style="text-align:center;color:var(--muted);padding:24px;">No jobs match your filters.</td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+  </div>
+</section>
+</main>
+<app-footer></app-footer>
+</div>

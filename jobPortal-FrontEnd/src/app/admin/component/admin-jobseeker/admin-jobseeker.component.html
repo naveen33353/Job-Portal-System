@@ -1,0 +1,137 @@
+<div class="page" *ngIf="seeker">
+<app-header variant="admin"></app-header>
+<div class="app-shell">
+<app-sidebar variant="admin"></app-sidebar>
+<main class="main">
+
+<div class="breadcrumb">
+  <a routerLink="/admin/jobseekers">Job Seekers</a> / <span>{{ seeker.name }}</span>
+</div>
+
+<div style="display:flex;justify-content:space-between;align-items:flex-start;margin-bottom:24px;">
+  <div style="display:flex;gap:16px;align-items:center;">
+    <div class="avatar" style="width:64px;height:64px;font-size:18px;">{{ initials }}</div>
+    <div>
+      <h2 style="font-size:22px;margin-bottom:4px;">{{ seeker.name }}</h2>
+      <p class="muted" style="font-size:13.5px;margin-bottom:6px;">
+        {{ seeker.location }} · {{ seeker.email }} · {{ seeker.phone }}
+      </p>
+      <div style="display:flex;gap:6px;">
+        <span class="chip"
+              [ngClass]="{
+                'chip-approved': seeker.status === 'Active',
+                'chip-rejected': seeker.status === 'Suspended',
+                'chip-pending': seeker.status === 'Reported'
+              }">{{ seeker.status }}</span>
+        <span class="chip chip-open" *ngIf="seeker.verifiedEmail">Verified email</span>
+        <span class="chip chip-open" *ngIf="seeker.resumeOnFile">Resume on file</span>
+      </div>
+    </div>
+  </div>
+  <div style="display:flex;gap:8px;">
+    <button class="btn btn-secondary btn-sm" (click)="message()">Message</button>
+    <button *ngIf="seeker.status === 'Active'"    class="btn btn-secondary btn-sm" (click)="suspend()">Suspend</button>
+    <button *ngIf="seeker.status !== 'Active'"    class="btn btn-secondary btn-sm" (click)="reinstate()">Reinstate</button>
+    <button class="btn btn-outline-danger btn-sm" (click)="deleteAccount()">Delete account</button>
+  </div>
+</div>
+
+<div class="card-row-3" style="margin-bottom:24px;">
+  <div class="stat-card"><div class="n">{{ seeker.applications.length }}</div><div class="l">Applications</div></div>
+  <div class="stat-card"><div class="n">3</div><div class="l">Approved</div></div>
+  <div class="stat-card"><div class="n">{{ seeker.savedJobs.length }}</div><div class="l">Saved jobs</div></div>
+</div>
+
+<div class="card-row" style="align-items:start;">
+  <div>
+    <div class="card" style="margin-bottom:16px;">
+      <h3 style="font-size:14px;margin-bottom:10px;">Profile</h3>
+      <div style="display:grid;grid-template-columns:1fr 1fr;gap:12px;font-size:13.5px;">
+        <div><span class="muted">Headline</span><div style="font-weight:600;">{{ seeker.headline }}</div></div>
+        <div><span class="muted">Joined</span><div style="font-weight:600;">{{ seeker.joined }}</div></div>
+        <div><span class="muted">Last active</span><div style="font-weight:600;">{{ seeker.lastActive }}</div></div>
+        <div><span class="muted">Profile completion</span><div style="font-weight:600;">{{ seeker.profileCompletion }}%</div></div>
+      </div>
+    </div>
+
+    <div class="card" style="margin-bottom:16px;">
+      <h3 style="font-size:14px;margin-bottom:10px;">Skills</h3>
+      <div class="skill-tags">
+        <span class="skill-tag" *ngFor="let skill of seeker.skills">{{ skill }}</span>
+      </div>
+    </div>
+
+    <div class="card" style="margin-bottom:16px;">
+      <h3 style="font-size:14px;margin-bottom:10px;">Resume</h3>
+      <div *ngIf="seeker.resumeOnFile; else noResume" style="display:flex;justify-content:space-between;align-items:center;padding:12px;border:1px dashed var(--line);border-radius:8px;">
+        <div>
+          <div style="font-weight:600;font-size:13.5px;">{{ seeker.firstName | lowercase }}_{{ seeker.lastName | lowercase }}_resume.pdf</div>
+          <div class="muted" style="font-size:12.5px;">On file</div>
+        </div>
+        <a [href]="seeker.resumeUrl" target="_blank" rel="noopener" class="btn btn-secondary btn-sm">Download</a>
+      </div>
+      <ng-template #noResume>
+        <div class="muted" style="font-size:13px;padding:12px;border:1px dashed var(--line);border-radius:8px;">No resume on file.</div>
+      </ng-template>
+    </div>
+
+    <div class="section-head">
+      <h2>Application history ({{ applications.length }})</h2>
+      <a routerLink="/admin/applications" class="btn btn-secondary btn-sm">View all</a>
+    </div>
+    <div class="table-wrap">
+      <table>
+        <thead><tr><th>Job</th><th>Company</th><th>Applied</th><th>Status</th></tr></thead>
+        <tbody>
+          <tr *ngFor="let app of applications">
+            <td>{{ app.jobTitle }}</td>
+            <td>{{ app.companyName }}</td>
+            <td>{{ formatDate(app.appliedDate) }}</td>
+            <td>
+              <span class="chip"
+                    [ngClass]="{
+                      'chip-pending': app.status === 'PENDING',
+                      'chip-approved': app.status === 'APPROVED',
+                      'chip-rejected': app.status === 'REJECTED',
+                      'chip-canceled': app.status === 'CANCELED'
+                    }">{{ app.status }}</span>
+            </td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+  </div>
+
+  <div>
+    <div class="card" style="margin-bottom:16px;">
+      <h3 style="font-size:14px;margin-bottom:10px;">Contact</h3>
+      <div style="font-size:13.5px;line-height:1.8;">
+        <div><span class="muted">Email</span> {{ seeker.email }}</div>
+        <div><span class="muted">Phone</span> {{ seeker.phone }}</div>
+        <div><span class="muted">LinkedIn</span> {{ seeker.linkedin }}</div>
+        <div><span class="muted">Portfolio</span> {{ seeker.portfolio }}</div>
+      </div>
+    </div>
+
+    <div class="card" style="margin-bottom:16px;">
+      <h3 style="font-size:14px;margin-bottom:10px;">Saved jobs ({{ seeker.savedJobs.length }})</h3>
+      <div style="font-size:13.5px;line-height:1.9;">
+        <div *ngFor="let j of seeker.savedJobs">· {{ j }}</div>
+        <div style="color:var(--muted);">+ {{ applications.length - seeker.savedJobs.length }} more</div>
+      </div>
+    </div>
+
+    <div class="card">
+      <h3 style="font-size:14px;margin-bottom:10px;">Moderation log</h3>
+      <div style="font-size:13px;line-height:1.7;">
+        <div *ngFor="let entry of seeker.moderationLog">
+          <span class="muted">{{ entry.date }}</span> · {{ entry.event }}
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+</main>
+</div>
+</div>

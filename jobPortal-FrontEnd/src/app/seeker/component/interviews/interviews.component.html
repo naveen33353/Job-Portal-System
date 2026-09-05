@@ -1,0 +1,34 @@
+<div class="page">
+<app-header variant="seeker"></app-header>
+<div class="app-shell">
+<app-sidebar variant="seeker"></app-sidebar>
+<main class="main">
+
+<div class="page-title">My Interviews</div>
+<div class="page-sub">Upcoming and past interviews for your applications.</div>
+
+<div class="table-wrap" style="margin-top:20px;">
+  <table>
+    <thead><tr><th>Role</th><th>Company</th><th>Scheduled</th><th>Mode</th><th>Location / link</th><th>Status</th></tr></thead>
+    <tbody>
+      <tr *ngFor="let iv of interviews">
+        <td>{{ iv.jobTitle }}</td>
+        <td>{{ iv.companyName }}</td>
+        <td>{{ iv.scheduledAt | date:'medium' }}</td>
+        <td>{{ iv.mode }}</td>
+        <td>
+          <a *ngIf="iv.mode === 'ONLINE'" [href]="iv.location" target="_blank">Join link</a>
+          <span *ngIf="iv.mode === 'OFFLINE'">{{ iv.location }}</span>
+        </td>
+        <td><span class="chip" [ngClass]="statusChipClass(iv.status)">{{ iv.status }}</span></td>
+      </tr>
+      <tr *ngIf="interviews.length === 0">
+        <td colspan="6" style="text-align:center;color:var(--muted);padding:24px;">No interviews scheduled yet.</td>
+      </tr>
+    </tbody>
+  </table>
+</div>
+
+</main>
+</div>
+</div>

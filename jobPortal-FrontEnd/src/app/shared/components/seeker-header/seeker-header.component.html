@@ -1,0 +1,25 @@
+<header class="topnav app">
+  <div class="wrap">
+    <a routerLink="/jobseeker-dashboard" class="brand">
+      <span class="brand-dot"></span>HireHub
+    </a>
+
+    <nav class="nav-links app-links">
+      <a routerLink="/jobseeker-dashboard" routerLinkActive="active">Dashboard</a>
+      <a routerLink="/alljobs" routerLinkActive="active">Find Jobs</a>
+      <a routerLink="/jobseeker-applications" routerLinkActive="active">Applications</a>
+      <a routerLink="/saved-jobs" routerLinkActive="active">Saved</a>
+      <a routerLink="/profile-jobseeker" routerLinkActive="active">Profile</a>
+    </nav>
+
+    <ng-container *ngIf="showLogout; else avatarOnly">
+      <div class="nav-actions">
+        <div class="avatar">{{ avatar }}</div>
+        <button class="btn btn-ghost-dark btn-sm" (click)="onLogout()">Logout</button>
+      </div>
+    </ng-container>
+    <ng-template #avatarOnly>
+      <div class="avatar">{{ avatar }}</div>
+    </ng-template>
+  </div>
+</header>

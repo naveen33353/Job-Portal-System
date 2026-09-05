@@ -1,0 +1,27 @@
+<div class="page">
+<app-header variant="seeker"></app-header>
+<div class="app-shell">
+<app-sidebar variant="seeker"></app-sidebar>
+<main class="main">
+
+<div class="page-title">Edit Profile</div>
+<div class="form-card">
+  <div class="card-row">
+    <div class="field"><label>First name</label><input [(ngModel)]="firstName" name="firstName"></div>
+    <div class="field"><label>Last name</label><input [(ngModel)]="lastName" name="lastName"></div>
+  </div>
+  <div class="field"><label>Email</label><input [(ngModel)]="email" name="email"></div>
+  <div class="field"><label>Location</label><input [(ngModel)]="location" name="location"></div>
+  <div class="field"><label>Skills (comma separated)</label><input [(ngModel)]="skillsText" name="skillsText"></div>
+  <div class="form-actions">
+    <button class="btn btn-primary" [disabled]="saving" (click)="save()">{{ saving ? 'Saving…' : 'Save changes' }}</button>
+    <a routerLink="/seeker/profile-jobseeker" class="btn btn-secondary">Cancel</a>
+  </div>
+  <div class="danger-zone">
+    <button class="btn btn-outline-danger">Delete my account</button>
+  </div>
+</div>
+
+</main>
+</div>
+</div>

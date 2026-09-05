@@ -1,0 +1,92 @@
+<div class="page">
+<app-header variant="admin"></app-header>
+<div class="app-shell">
+<app-sidebar variant="admin"></app-sidebar>
+<main class="main-wide">
+
+<div class="page-title">All Applications</div>
+<div class="page-sub">Triage, moderate, and bulk-approve candidate applications.</div>
+
+<div *ngIf="jobIdFilter != null" class="chip chip-pending" style="display:inline-flex;align-items:center;gap:8px;margin-bottom:16px;">
+  Filtered to: {{ jobTitleFilter || ('Job #' + jobIdFilter) }}
+  <a href="javascript:void(0)" (click)="clearJobFilter()" style="text-decoration:underline;">Clear</a>
+</div>
+
+<div class="tab-row" style="margin-top:8px;margin-bottom:16px;">
+  <span class="tab" [class.active]="activeTab === 'ALL'"      (click)="setTab('ALL')">All ({{ allCount }})</span>
+  <span class="tab" [class.active]="activeTab === 'APPROVED'" (click)="setTab('APPROVED')">Approved ({{ approvedCount }})</span>
+  <span class="tab" [class.active]="activeTab === 'PENDING'"  (click)="setTab('PENDING')">Pending ({{ pendingCount }})</span>
+  <span class="tab" [class.active]="activeTab === 'REJECTED'" (click)="setTab('REJECTED')">Rejected ({{ rejectedCount }})</span>
+</div>
+
+<div class="section-head">
+  <h2>Application queue</h2>
+  <input type="text" [(ngModel)]="searchTerm" placeholder="Search by applicant, job, or company" style="padding:10px 14px;border:1px solid var(--line);border-radius:8px;width:280px;">
+</div>
+
+<div class="table-wrap">
+  <table>
+    <thead>
+      <tr>
+        <th><input type="checkbox" (change)="toggleAll($event)"></th>
+        <th>Applicant</th>
+        <th>Job</th>
+        <th>Company</th>
+        <th>Applied</th>
+        <th>Status</th>
+        <th></th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr *ngFor="let app of visibleRows">
+        <td><input type="checkbox" [checked]="selected.has(app.id)" (change)="toggle(app.id)"></td>
+        <td>{{ app.jobSeekerName }}</td>
+        <td>{{ app.jobTitle }}</td>
+        <td>{{ app.companyName }}</td>
+        <td>{{ formatDate(app.appliedDate) }}</td>
+        <td>
+          <span class="chip"
+                [ngClass]="{
+                  'chip-pending': app.status === 'PENDING',
+                  'chip-approved': app.status === 'APPROVED',
+                  'chip-rejected': app.status === 'REJECTED'
+                }">{{ app.status }}</span>
+        </td>
+        <td class="actions">
+          <a [routerLink]="['/admin/jobseekers', app.jobSeekerId]">View</a>
+          <a *ngIf="app.status !== 'APPROVED'" href="javascript:void(0)" (click)="approve(app)">Approve</a>
+          <a *ngIf="app.status !== 'REJECTED'" href="javascript:void(0)" (click)="reject(app)">Reject</a>
+          <a href="javascript:void(0)" class="danger" (click)="deleteRow(app)">Delete</a>
+        </td>
+      </tr>
+      <tr *ngIf="visibleRows.length === 0">
+        <td colspan="7" class="muted" style="text-align:center;padding:24px;">No applications in this view.</td>
+      </tr>
+    </tbody>
+  </table>
+</div>
+
+<div style="display:flex;justify-content:space-between;align-items:center;margin-top:20px;font-size:13px;color:var(--muted);">
+  <div>Showing {{ visibleRows.length }} of {{ allCount }}</div>
+  <div style="display:flex;gap:8px;align-items:center;">
+    <button class="btn btn-secondary btn-sm">Previous</button>
+    <span>Page 1</span>
+    <button class="btn btn-secondary btn-sm">Next</button>
+  </div>
+</div>
+
+<div class="card" style="margin-top:32px;">
+  <h3 style="font-size:14px;margin-bottom:12px;">Bulk actions</h3>
+  <p class="muted" style="font-size:13px;margin-bottom:12px;">
+    {{ selected.size }} selected. Triage faster with batch approve / reject.
+  </p>
+  <div style="display:flex;gap:10px;">
+    <button class="btn btn-secondary btn-sm" (click)="bulkApprove()">Approve selected</button>
+    <button class="btn btn-secondary btn-sm" (click)="bulkReject()">Reject selected</button>
+    <button class="btn btn-outline-danger btn-sm" (click)="bulkDelete()">Delete selected</button>
+  </div>
+</div>
+
+</main>
+</div>
+</div>

@@ -1,0 +1,37 @@
+<div class="page">
+<app-header variant="company"></app-header>
+<div class="app-shell">
+<app-sidebar variant="company"></app-sidebar>
+<main class="main">
+
+<div class="page-title">{{company?.companyName}}</div>
+<div class="page-sub">Hiring overview</div>
+<div style="margin-bottom:24px;"><a routerLink="/company/company-post-job" class="btn btn-primary">Post a job</a></div>
+<div class="card-row-3" style="margin-bottom:16px;">
+  <div class="stat-card"><div class="n">{{jobs.length}}</div><div class="l">Active jobs</div></div>
+  <div class="stat-card"><div class="n">{{applications.length}}</div><div class="l">Total applicants</div></div>
+  <div class="stat-card"><div class="n">{{pendingApplications.length}}</div><div class="l">Pending review</div><span class="sub" *ngIf="pendingApplications.length > 0">needs action</span></div>
+</div>
+<div class="card-row-3" style="margin-bottom:32px;grid-template-columns:1fr;max-width:220px;">
+  <div class="stat-card"><div class="n">{{approvedAppplications.length}}</div><div class="l">Hired</div></div>
+</div>
+<div class="section-head"><h2>Your jobs</h2></div>
+<div class="table-wrap" style="margin-bottom:32px;">
+  <table>
+    <thead><tr><th>Role</th><th>Posted</th><th>Applicants</th><th>Status</th></tr></thead>
+    <tbody>
+      <tr *ngFor="let job of jobs"><td>{{job.jobTitle}}</td><td>{{job.postedDate}}</td><td>{{job.applicantCount}}</td><td><span class="chip" [ngClass]="job.active ? 'chip-open' : 'chip-closed'">{{ job.active ? 'Open' : 'Closed' }}</span></td></tr>
+    </tbody>
+  </table>
+</div>
+<div class="section-head"><h2>Latest applicants</h2></div>
+<div class="card-row">
+  <div class="card" *ngFor="let app of applications | slice:0:2"><div style="display:flex;justify-content:space-between;"><h3 style="font-size:15px;">{{app.jobSeekerName}}</h3><span class="chip" [ngClass]="{
+        'chip-pending': app.status === 'PENDING',
+        'chip-approved': app.status === 'APPROVED',
+        'chip-rejected': app.status === 'REJECTED'}">{{ app.status }}</span></div><p class="muted" style="font-size:13px;margin-top:6px;">{{app.jobTitle}} | {{app.appliedDate}}</p></div>
+</div>
+
+</main>
+</div>
+</div>

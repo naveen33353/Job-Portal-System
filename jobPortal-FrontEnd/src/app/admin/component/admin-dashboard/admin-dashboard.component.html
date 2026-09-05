@@ -1,0 +1,86 @@
+<div class="page">
+<app-header variant="admin"></app-header>
+<div class="app-shell">
+<app-sidebar variant="admin"></app-sidebar>
+<main class="main-wide">
+
+<div class="page-title">Platform overview</div>
+<div class="page-sub">A snapshot of what's happening on HireHub today.</div>
+
+<div class="card-row-3" style="margin-bottom:16px;">
+  <div class="stat-card">
+    <div class="n">{{ totalSeekers | number }}</div>
+    <div class="l">Job seekers</div>
+  </div>
+  <div class="stat-card">
+    <div class="n">{{ totalCompanies | number }}</div>
+    <div class="l">Companies</div>
+  </div>
+  <div class="stat-card">
+    <div class="n">{{ totalJobs | number }}</div>
+    <div class="l">Live jobs</div>
+  </div>
+</div>
+<div class="card-row-3" style="margin-bottom:32px;grid-template-columns:1fr;max-width:220px;">
+  <div class="stat-card">
+    <div class="n">{{ totalApplications | number }}</div>
+    <div class="l">Applications today</div>
+  </div>
+</div>
+
+<div class="card-row" style="align-items:start;">
+  <div>
+    <div class="section-head">
+      <h2>Recent applications</h2>
+      <a routerLink="/admin/applications" class="btn btn-secondary btn-sm">View all</a>
+    </div>
+    <div class="table-wrap">
+      <table>
+        <thead>
+          <tr><th>Applicant</th><th>Job</th><th>Company</th><th>Status</th></tr>
+        </thead>
+        <tbody>
+          <tr *ngFor="let app of recentApplications">
+            <td>{{ app.jobSeekerName }}</td>
+            <td>{{ app.jobTitle }}</td>
+            <td>{{ app.companyName }}</td>
+            <td>
+              <span class="chip"
+                    [ngClass]="{
+                      'chip-pending': app.status === 'PENDING',
+                      'chip-approved': app.status === 'APPROVED',
+                      'chip-rejected': app.status === 'REJECTED'
+                    }">
+                {{ app.status }}
+              </span>
+            </td>
+          </tr>
+          <tr *ngIf="recentApplications.length === 0">
+            <td colspan="4" class="muted" style="text-align:center;padding:24px;">No applications yet.</td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+  </div>
+
+  <div>
+    <div class="section-head"><h2>Newest companies</h2></div>
+    <div class="card" *ngFor="let comp of newestCompanies" style="margin-bottom:12px;">
+      <p style="font-weight:600;font-size:14px;">{{ comp.companyName }}</p>
+      <p class="muted" style="font-size:13px;">{{ comp.location }}</p>
+    </div>
+
+    <div class="section-head" style="margin-top:24px;"><h2>Quick actions</h2></div>
+    <div class="card">
+      <div style="display:flex;flex-direction:column;gap:10px;">
+        <a routerLink="/admin/companies" class="btn btn-secondary btn-sm">Review pending companies</a>
+        <a routerLink="/admin/jobs" class="btn btn-secondary btn-sm">Review flagged jobs</a>
+        <a routerLink="/admin/jobseekers" class="btn btn-secondary btn-sm">Resolve reported seekers</a>
+      </div>
+    </div>
+  </div>
+</div>
+
+</main>
+</div>
+</div>

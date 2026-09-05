@@ -1,0 +1,92 @@
+<div class="page">
+<app-header variant="admin"></app-header>
+<div class="app-shell">
+<app-sidebar variant="admin"></app-sidebar>
+<main class="main">
+
+<div class="page-title">Admin Profile</div>
+<div class="page-sub">Manage your account, notifications, and platform preferences.</div>
+
+<div class="card-row" style="align-items:start;">
+  <div>
+    <div class="section-head"><h2>Account details</h2></div>
+    <div class="form-card">
+      <div class="field"><label>Name</label>     <input [(ngModel)]="profile.name"     value="profile.name"></div>
+      <div class="field"><label>Email</label>    <input [(ngModel)]="profile.email"    value="profile.email"></div>
+      <div class="field">
+        <label>Role</label>
+        <input [value]="profile.role" disabled style="background:var(--paper-dim);color:var(--muted);">
+      </div>
+      <div class="field"><label>Timezone</label> <input [(ngModel)]="profile.timezone" value="profile.timezone"></div>
+      <div class="form-actions">
+        <a href="javascript:void(0)" class="btn btn-primary" (click)="saveProfile()">Save changes</a>
+        <a href="javascript:void(0)" class="btn btn-secondary">Cancel</a>
+      </div>
+    </div>
+
+    <div class="section-head" style="margin-top:32px;"><h2>Security</h2></div>
+    <div class="form-card">
+      <div class="field"><label>Current password</label>     <input type="password" value="········"></div>
+      <div class="field"><label>New password</label>         <input type="password" placeholder="At least 12 characters"></div>
+      <div class="field"><label>Confirm new password</label> <input type="password" placeholder="Re-enter new password"></div>
+      <div class="form-actions">
+        <a href="javascript:void(0)" class="btn btn-primary" (click)="changePassword()">Update password</a>
+      </div>
+    </div>
+
+    <div class="card" style="margin-top:16px;">
+      <h3 style="font-size:14px;margin-bottom:10px;">Two-factor authentication</h3>
+      <p class="muted" style="font-size:13px;margin-bottom:12px;">Protect your admin account with an authenticator app.</p>
+      <div style="display:flex;justify-content:space-between;align-items:center;">
+        <div>
+          <span class="chip chip-approved">Enabled</span>
+          <span style="margin-left:8px;font-size:13px;">Authenticator app</span>
+        </div>
+        <button class="btn btn-secondary btn-sm">Manage</button>
+      </div>
+    </div>
+  </div>
+
+  <div>
+    <div class="card" style="margin-bottom:16px;">
+      <h3 style="font-size:14px;margin-bottom:10px;">Notification preferences</h3>
+      <div style="font-size:13.5px;line-height:2;">
+        <label *ngFor="let pref of notifications"
+               style="display:flex;justify-content:space-between;align-items:center;cursor:pointer;">
+          <span>{{ pref.label }}</span>
+          <input type="checkbox" [checked]="pref.enabled" (change)="toggleNotification(pref)">
+        </label>
+      </div>
+    </div>
+
+    <div class="card" style="margin-bottom:16px;">
+      <h3 style="font-size:14px;margin-bottom:10px;">Permissions</h3>
+      <div class="skill-tags">
+        <span class="skill-tag" *ngFor="let p of permissions">{{ p }}</span>
+      </div>
+    </div>
+
+    <div class="card" style="margin-bottom:16px;">
+      <h3 style="font-size:14px;margin-bottom:10px;">Team</h3>
+      <div style="font-size:13.5px;line-height:1.9;">
+        <div *ngFor="let member of team">
+          {{ member.name }} — <span class="muted">{{ member.role }} · {{ member.lastActive }}</span>
+        </div>
+        <div><a href="javascript:void(0)" style="font-size:13px;">Manage team →</a></div>
+      </div>
+    </div>
+
+    <div class="card">
+      <h3 style="font-size:14px;margin-bottom:10px;">Recent admin activity</h3>
+      <div style="font-size:13px;line-height:1.7;">
+        <div *ngFor="let entry of activity">
+          <span class="muted">{{ entry.when }}</span> · <span [innerHTML]="entry.text"></span>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+</main>
+</div>
+</div>

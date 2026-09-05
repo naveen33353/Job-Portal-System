@@ -1,0 +1,41 @@
+<div class="page">
+<app-header variant="seeker"></app-header>
+<div class="app-shell">
+<app-sidebar variant="seeker"></app-sidebar>
+<main class="main">
+
+<div class="breadcrumb"><a routerLink="/application/jobseeker-applications">My Applications</a> / <span>{{application?.jobTitle}}</span></div>
+<div class="card-row" style="grid-template-columns:2fr 1fr;align-items:start;">
+  <div>
+    <div style="display:flex;justify-content:space-between;align-items:baseline;">
+      <h1 style="font-size:22px;">{{application?.jobTitle}}</h1><span class="chip" [ngClass]="{
+            'chip-pending': application?.status === 'PENDING',
+            'chip-approved': application?.status === 'APPROVED',
+            'chip-rejected': application?.status === 'REJECTED',
+            'chip-canceled': application?.status === 'CANCELED',
+            'chip-completed': application?.status === 'COMPLETED'}">{{application?.status}}</span>
+    </div>
+    <p class="muted" style="margin-top:4px;">{{application?.companyName}} &middot; Applied {{application?.appliedDate | date}}</p>
+    <div class="card" style="margin-top:20px;">
+      <h3 style="font-size:14px;margin-bottom:8px;">Timeline</h3>
+      <div class="timeline">
+        <div class="timeline-item"><span class="date">{{application?.appliedDate | date}}</span>Application submitted</div>
+      </div>
+      <p class="muted" style="font-size:13px;" *ngIf="application?.status === 'PENDING'">Awaiting decision&hellip;</p>
+      <p class="muted" style="font-size:13px;" *ngIf="application?.status === 'APPROVED'">Great news — this application was approved.</p>
+      <p class="muted" style="font-size:13px;" *ngIf="application?.status === 'REJECTED'">This application was not selected to move forward.</p>
+      <p class="muted" style="font-size:13px;" *ngIf="application?.status === 'CANCELED'">This application was withdrawn.</p>
+      <p class="muted" style="font-size:13px;" *ngIf="application?.status === 'COMPLETED'">This hiring process has been completed.</p>
+    </div>
+  </div>
+  <div class="card">
+    <h3 style="font-size:14px;margin-bottom:8px;">Job snapshot</h3>
+    <p style="font-size:13.5px;">{{application?.location}}, IN</p>
+    <a [routerLink]="['/job/view-job', application?.jobId]" class="btn btn-secondary btn-block" style="margin-top:14px;">View job posting</a>
+    <button *ngIf="application?.status === 'PENDING'" class="btn btn-outline-danger btn-block" style="margin-top:8px;" (click)="withdrawApplication(application?.applicationId)">Withdraw application</button>
+  </div>
+</div>
+
+</main>
+</div>
+</div>

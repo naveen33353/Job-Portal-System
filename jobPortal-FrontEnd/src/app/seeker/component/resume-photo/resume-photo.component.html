@@ -1,0 +1,46 @@
+<div class="page">  <app-header></app-header>
+    <div class="app-shell"> <app-sidebar variant="seeker" ></app-sidebar>
+        <main class="main">
+            <div class="page-title"> Resume &amp; Photo </div>
+            <div class="card-row"> <!-- Resume Card -->
+                <div class="card">
+                    <h3 style="font-size:14px;margin-bottom:14px;"> Resume </h3> <!-- Resume exists -->
+                    <div class="file-row" *ngIf="jobSeeker?.resumeUrl; else noResume">
+                        <div class="file-icon"> PDF </div>
+                        <div>
+                            <div class="name"> {{ jobSeeker.resumeUrl }} </div>
+                            <div class="sub"> Resume uploaded </div>
+                        </div> <button type="button" class="btn btn-secondary btn-sm" style="margin-left:auto;"
+                            (click)="resumeInput.click()"> Replace </button>
+                    </div> <!-- No Resume --> <ng-template #noResume>
+                        <div class="file-row">
+                            <div class="file-icon"> PDF </div>
+                            <div>
+                                <div class="name"> No resume uploaded </div>
+                                <div class="sub"> Upload your resume to apply for jobs. </div>
+                            </div>
+                        </div>
+                    </ng-template> <!-- Hidden Resume Input --> <input #resumeInput type="file" accept=".pdf" hidden
+                        (change)="onResumeSelected($event)">
+                    <div style="display:flex;gap:8px;">
+                        <button type="button" class="btn btn-primary btn-sm" (click)="resumeInput.click()">
+                            Upload new resume
+                        </button>
+
+                        <button type="button" class="btn btn-outline-danger btn-sm" (click)="deleteResume()"
+                            *ngIf="jobSeeker?.resumeUrl">
+                            Delete resume
+                        </button>
+                    </div>
+                </div> <!-- Profile Photo Card -->
+                <div class="card" style="text-align:center;">
+                    <h3 style="font-size:14px;margin-bottom:14px;"> Profile photo </h3>
+                    <div class="avatar" style="width:70px;height:70px;font-size:20px;margin:0 auto 14px;"> {{
+                        firstName.charAt(0) }}{{ lastName.charAt(0) }} </div> <input #photoInput type="file"
+                        accept="image/*" hidden> <button type="button" class="btn btn-secondary btn-sm"
+                        (click)="photoInput.click()"> Upload new photo </button>
+                </div>
+            </div>
+        </main>
+    </div>
+</div>

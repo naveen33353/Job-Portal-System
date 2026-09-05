@@ -1,0 +1,22 @@
+<div class="page">
+<app-header variant="guest"></app-header>
+
+<div class="auth-wrap">
+  <form [formGroup]="regSeeker" (ngSubmit)="onSubmit()">
+    <div class="auth-card">
+      <h2>Create your Job Seeker account</h2>
+      <div class="card-row">
+        <div class="field"><label>First name</label><input formControlName="firstName" placeholder="Aditi"></div>
+        <div class="field"><label>Last name</label><input formControlName="lastName" placeholder="Menon"></div>
+      </div>
+      <div class="field"><label>Email</label><input formControlName="email" type="email" placeholder="aditi@email.com"></div>
+      <div class="field"><label>Password</label><input formControlName="password" type="password" placeholder="&bull;&bull;&bull;&bull;&bull;&bull;&bull;&bull;"></div>
+      <div class="field"><label>Location</label><input formControlName="location" placeholder="Kochi, IN"></div>
+      <div class="field"><label>Primary skills</label><input formControlName="skills" placeholder="Java, React"></div>
+      <button class="btn btn-primary btn-block" type="submit">Create account</button>
+    </div>
+  </form>
+</div>
+
+<app-footer></app-footer>
+</div>

@@ -1,0 +1,72 @@
+<div class="page">
+<app-header variant="company"></app-header>
+<div class="app-shell">
+<app-sidebar variant="company"></app-sidebar>
+<main class="main">
+
+<div class="breadcrumb">Applicants / <span>{{app?.jobSeekerName}}</span></div>
+<div class="card-row" style="grid-template-columns:1fr 2fr;align-items:start;">
+  <div class="card">
+    <div class="avatar" style="width:52px;height:52px;font-size:16px;margin-bottom:12px;" *ngIf="app">{{app.jobSeekerName.charAt(0)}}</div>
+    <h3 style="font-size:17px;">{{app?.jobSeekerName}}</h3>
+    <p class="muted" style="font-size:13px;">{{app?.location}}</p>
+    <p class="muted" style="font-size:13px;">{{app?.email}}</p>
+    <a *ngIf="app?.resumeUrl" [href]="app.resumeUrl" target="_blank" class="btn btn-secondary btn-block" style="margin-top:16px;">Open resume PDF</a>
+  </div>
+  <div class="card">
+    <div style="display:flex;justify-content:space-between;">
+      <h3 style="font-size:15px;">Application for {{app?.jobTitle}}</h3>
+      <span class="chip " [ngClass]="{'chip-rejected':app?.status === 'REJECTED','chip-pending' : app?.status === 'PENDING','chip-open' : app?.status === 'APPROVED'}">{{app?.status}}</span>
+    </div>
+    <p class="muted" style="font-size:13px;margin-top:4px;">Applied on {{app?.appliedDate}}</p>
+    <div style="margin-top:18px;height:220px;border:1px dashed var(--line);border-radius:8px;display:flex;align-items:center;justify-content:center;color:var(--muted);font-size:13px;">Resume preview (PDF)</div>
+    <a [routerLink]="['/company/company/review', app?.applicationId]" class="btn btn-primary" style="margin-top:16px;">Review application</a>
+  </div>
+</div>
+
+<div class="section-head" style="margin-top:28px;"><h2>Interviews</h2></div>
+<div class="card">
+  <div class="table-wrap" *ngIf="interviews.length > 0" style="margin-bottom:16px;">
+    <table>
+      <thead><tr><th>Scheduled</th><th>Mode</th><th>Interviewer</th><th>Status</th></tr></thead>
+      <tbody>
+        <tr *ngFor="let iv of interviews">
+          <td>{{ iv.scheduledAt | date:'medium' }}</td>
+          <td>{{ iv.mode }}</td>
+          <td>{{ iv.interviewerName }}</td>
+          <td><span class="chip" [ngClass]="statusChipClass(iv.status)">{{ iv.status }}</span></td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+  <p class="muted" style="font-size:13px;" *ngIf="interviews.length === 0 && !showScheduleForm">No interview scheduled yet for this application.</p>
+
+  <button class="btn btn-secondary btn-sm" (click)="toggleScheduleForm()" *ngIf="!showScheduleForm">{{ interviews.length > 0 ? 'Schedule another interview' : 'Schedule Interview' }}</button>
+
+  <form [formGroup]="interviewForm" (ngSubmit)="scheduleInterview()" *ngIf="showScheduleForm" style="margin-top:12px;">
+    <div class="card-row">
+      <div class="field"><label>Date &amp; time</label><input formControlName="scheduledAt" type="datetime-local"></div>
+      <div class="field">
+        <label>Mode</label>
+        <select formControlName="mode">
+          <option value="ONLINE">Online</option>
+          <option value="OFFLINE">Offline</option>
+        </select>
+      </div>
+    </div>
+    <div class="field"><label>Meeting link / venue</label><input formControlName="location" placeholder="https://meet.google.com/xyz or office address"></div>
+    <div class="field"><label>Interviewer name</label><input formControlName="interviewerName" placeholder="Priya"></div>
+    <div class="field"><label>Notes</label><textarea formControlName="notes" placeholder="Bring resume, ID, etc."></textarea></div>
+
+    <p class="muted" style="color:var(--rose);font-size:13px;margin-bottom:10px;" *ngIf="scheduleError">{{ scheduleError }}</p>
+
+    <div class="form-actions">
+      <button class="btn btn-primary" type="submit" [disabled]="scheduling">{{ scheduling ? 'Scheduling…' : 'Confirm interview' }}</button>
+      <a (click)="toggleScheduleForm()" class="btn btn-secondary" style="cursor:pointer;">Cancel</a>
+    </div>
+  </form>
+</div>
+
+</main>
+</div>
+</div>

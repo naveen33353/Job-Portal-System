@@ -1,0 +1,28 @@
+<div class="page">
+<app-header variant="seeker"></app-header>
+<div class="app-shell">
+<app-sidebar variant="seeker"></app-sidebar>
+<main class="main">
+
+<div class="page-title">Apply to {{job?.jobTitle}}</div>
+<div class="form-card" style="max-width:520px;">
+  <div style="display:flex;justify-content:space-between;align-items:baseline;margin-bottom:12px;">
+    <h3 style="margin:0;">{{job?.jobTitle}}</h3><span class="company-tag">{{job?.companyName}}</span>
+  </div>
+  <hr>
+  <div class="file-row">
+    <div class="file-icon">PDF</div>
+    <div><div class="name">Your resume</div><div class="sub">Attached from your profile</div></div>
+  </div>
+  <div class="field"><label>Note to recruiter (optional)</label><textarea [(ngModel)]="note" name="note" placeholder="Add a short note&hellip;"></textarea></div>
+  <p class="muted" style="font-size:12.5px;margin-bottom:6px;">Applied date is recorded automatically. Status starts as <span class="chip chip-pending">Pending</span></p>
+  <p *ngIf="errorMessage" style="color:#c0392b;font-size:13px;margin-bottom:12px;">{{ errorMessage }}</p>
+  <div class="form-actions" style="margin-top:0;">
+    <a (click)="!submitting && submitApplication()" class="btn btn-primary" style="cursor:pointer;" [class.btn-disabled]="submitting">{{ submitting ? 'Submitting…' : 'Submit application' }}</a>
+    <a [routerLink]="['/job/view-job', job?.jobId]" class="btn btn-secondary">Cancel</a>
+  </div>
+</div>
+
+</main>
+</div>
+</div>

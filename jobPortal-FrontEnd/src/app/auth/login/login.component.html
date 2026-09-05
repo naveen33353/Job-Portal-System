@@ -1,0 +1,19 @@
+<div class="page">
+<app-header variant="guest"></app-header>
+
+<div class="auth-wrap">
+  <div class="auth-card">
+    <span class="mono-label" style="color:var(--amber-dk)">Welcome back</span>
+    <h2>Log in to HireHub</h2>
+    <form [formGroup]="loginForm" (ngSubmit)="onSubmit()">
+      <div class="field"><label>Email</label><input formControlName="email" type="email" placeholder="you@email.com"></div>
+      <div class="field"><label>Password</label><input formControlName="password" type="password" placeholder="&bull;&bull;&bull;&bull;&bull;&bull;&bull;&bull;"></div>
+      <p *ngIf="errorMessage" style="color:#c0392b;font-size:13px;margin:4px 0 12px;">{{ errorMessage }}</p>
+      <button type="submit" class="btn btn-primary btn-block" [disabled]="loading">{{ loading ? 'Logging in…' : 'Log in' }}</button>
+    </form>
+    <p class="muted" style="font-size:13px;margin-top:18px;text-align:center;">No account? <a routerLink="/auth/register" style="color:var(--indigo);font-weight:600;">Register as Job Seeker or Company</a>.</p>
+  </div>
+</div>
+
+<app-footer></app-footer>
+</div>

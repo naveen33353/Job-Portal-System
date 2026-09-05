@@ -1,0 +1,48 @@
+<div class="page">
+<app-header variant="guest"></app-header>
+
+<main class="content">
+  <section class="section-pad">
+  <div class="wrap">
+    <div class="breadcrumb"><a routerLink="/job/all-jobs">Jobs</a> / <span>{{job?.jobTitle}}</span></div>
+    <div class="card-row" style="grid-template-columns:2fr 1fr;align-items:start;">
+      <div>
+        <div style="display:flex;justify-content:space-between;align-items:flex-start;">
+          <h1 style="font-size:26px;">{{job?.jobTitle}}</h1><span class="chip chip-open" *ngIf="job?.active">Open</span>
+        </div>
+        <p class="muted" style="margin-top:6px;">{{job?.companyName}} &middot; {{job?.location}}, IN &middot; {{job?.postedDate | date}}</p>
+        <div class="skill-tags" style="margin-top:16px;">
+          <span *ngFor="let skill of job?.skills" class="skill-tag">{{skill}}</span>
+        </div>
+        <div class="card" style="margin-top:24px;">
+          <p style="font-size:14px;color:var(--ink-soft);">{{job?.description}}</p>
+          <div class="card-row-3" style="margin-top:20px;">
+            <div><span class="mono-label">Experience</span>
+              <p style="margin-top:4px;font-weight:600;">{{job?.experience}}</p>
+            </div>
+            <div><span class="mono-label">Salary</span>
+              <p style="margin-top:4px;font-weight:600;">&#8377;{{job?.salary}}</p>
+            </div>
+            <div><span class="mono-label">Apply by</span>
+              <p style="margin-top:4px;font-weight:600;">{{job?.endDate | date}}</p>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div class="card">
+        <h3 style="font-size:15px;margin-bottom:10px;">Ready to apply?</h3>
+        <a [routerLink]="['/job/apply-job', job?.jobId]" class="btn btn-primary btn-block">Apply now</a>
+        <button class="btn btn-secondary btn-block" style="margin-top:8px;" (click)="saveJobToProfile()" [disabled]="isJobSaved">
+          {{ isJobSaved ? 'Saved' : 'Save' }}
+        </button>
+        <hr style="border:none;border-top:1px solid var(--line);margin:18px 0;">
+        <h3 style="font-size:14px;margin-bottom:6px;">About {{job?.companyName}}</h3>
+        <p class="muted" style="font-size:13px;">{{job?.location}}, IN &middot; {{job?.companyName}}</p>
+      </div>
+    </div>
+  </div>
+</section>
+</main>
+
+<app-footer></app-footer>
+</div>

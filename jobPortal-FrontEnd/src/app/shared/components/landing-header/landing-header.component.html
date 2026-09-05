@@ -1,0 +1,19 @@
+<header class="topnav">
+  <div class="wrap">
+    <a routerLink="/" class="brand"><span class="brand-dot"></span>HireHub</a>
+    <nav class="nav-links">
+      <a routerLink="alljobs">Find Jobs</a>
+      <a routerLink="all-companies">Companies</a>
+    </nav>
+
+    <div class="nav-actions" *ngIf="!isLoggedIn">
+      <a routerLink="/login" class="btn btn-ghost-dark btn-sm">Log in</a>
+      <a routerLink="/register" class="btn btn-primary btn-sm">Sign up</a>
+    </div>
+
+    <div class="nav-actions" *ngIf="isLoggedIn">
+      <a class="avatar" [routerLink]="profileRoute">{{ initials }}</a>
+      <button class="btn btn-ghost-dark btn-sm" (click)="onLogout()">Logout</button>
+    </div>
+  </div>
+</header>

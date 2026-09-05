@@ -1,0 +1,7 @@
+<div class="page">
+  <app-company-header [avatar]="avatar" [showLogout]="showLogout" (logoutRequest)="onLogout()"></app-company-header>
+  <div class="app-shell">
+    <app-company-sidebar></app-company-sidebar>
+    <ng-content></ng-content>
+  </div>
+</div>

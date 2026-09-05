@@ -1,0 +1,26 @@
+<div class="page">
+<app-header variant="company"></app-header>
+<div class="app-shell">
+<app-sidebar variant="company"></app-sidebar>
+<main class="main-wide">
+
+<div class="section-head"><h2>Manage Jobs</h2><a routerLink="/company/company-post-job" class="btn btn-primary btn-sm">Post a job</a></div>
+<div class="table-wrap">
+  <table>
+    <thead><tr><th>Role</th><th>Posted</th><th>Deadline</th><th>Applicants</th><th>Status</th><th></th></tr></thead>
+    <tbody>
+      <tr *ngFor="let job of jobs">
+        <td>{{job.jobTitle}}</td>
+        <td>{{job.postedDate}}</td>
+        <td>{{job.endDate}}</td>
+        <td>{{job.applicantCount}}</td>
+        <td><span class="chip" [ngClass]="job.active? 'chip-open':'chip-closed'">{{job.active? "open":"closed"}}</span></td>
+        <td class="actions"><a [routerLink]="['/company/company/applicants', job.jobId]">View applicants</a><a style="color: red;" (click)="deleteJob(job.jobId)">Delete</a></td>
+      </tr>
+    </tbody>
+  </table>
+</div>
+
+</main>
+</div>
+</div>

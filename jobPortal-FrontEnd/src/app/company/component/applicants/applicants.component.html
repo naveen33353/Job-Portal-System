@@ -1,0 +1,25 @@
+<div class="page">
+<app-header variant="company"></app-header>
+<div class="app-shell">
+<app-sidebar variant="company"></app-sidebar>
+<main class="main-wide">
+
+<div class="section-head"><h2>{{applications.length}} applicants across all jobs</h2></div>
+<div class="table-wrap">
+  <table>
+    <thead><tr><th>Applicant</th><th>Role</th><th>Applied On</th><th>Status</th><th></th></tr></thead>
+    <tbody>
+      <tr *ngFor="let app of applications">
+        <td>{{app.jobSeekerName}}</td>
+        <td>{{app.jobTitle}}</td>
+        <td>{{app.appliedDate}}</td>
+        <td><span class="chip" [ngClass]="{'chip-open': app.status === 'APPROVED', 'chip-rejected': app.status === 'REJECTED', 'chip-pending': app.status === 'PENDING'}">{{app.status}}</span></td>
+        <td class="actions"><a [routerLink]="['/company/company/applicant', app.id]">Review</a></td>
+      </tr>
+    </tbody>
+  </table>
+</div>
+
+</main>
+</div>
+</div>

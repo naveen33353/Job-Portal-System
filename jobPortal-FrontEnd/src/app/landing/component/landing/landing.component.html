@@ -1,0 +1,49 @@
+<div class="page">
+<app-header variant="guest"></app-header>
+
+<section class="hero">
+  <div class="wrap">
+    <h1>Find work that fits.<br>Hire people who fit.</h1>
+    <p class="lead">One portal for job seekers and companies — post a role, apply in minutes, track every application in one place.</p>
+    <div class="search-row">
+      <input type="text" [(ngModel)]="heroSearchTerm" (keyup.enter)="searchJobs()" placeholder="Job title, skill or keyword">
+      <a href="javascript:void(0)" (click)="searchJobs()" class="btn btn-primary">Search jobs</a>
+      <a routerLink="/auth/register/company" class="btn btn-ghost-dark">Post a job</a>
+    </div>
+    <div class="tag-row">
+      <span class="tag-pill" (click)="searchTag('React')" style="cursor:pointer;">React</span><span class="tag-pill" (click)="searchTag('Java')" style="cursor:pointer;">Java</span>
+      <span class="tag-pill" (click)="searchTag('Product')" style="cursor:pointer;">Product</span><span class="tag-pill" (click)="searchTag('Data')" style="cursor:pointer;">Data</span>
+      <span class="tag-pill" (click)="searchTag('Sales')" style="cursor:pointer;">Sales</span><span class="tag-pill" (click)="searchTag('Design')" style="cursor:pointer;">Design</span>
+    </div>
+    <div class="stat-row">
+      <div><div class="stat-num">{{jobs.length}}</div><div class="stat-label">Open roles</div></div>
+      <div><div class="stat-num">{{companies.length}}</div><div class="stat-label">Companies</div></div>
+    </div>
+  </div>
+</section>
+
+<section class="section-pad">
+  <div class="wrap">
+    <div class="section-head">
+      <h2>Featured roles</h2>
+      <a routerLink="/job/all-jobs" class="mono-label">View all jobs &rarr;</a>
+    </div>
+    <div class="card-row">
+      <div class="job-card" *ngFor="let job of jobs | slice:0:2">
+        <div class="top">
+          <h3>{{ job.jobTitle }}</h3>
+          <span class="chip chip-open" *ngIf="job.active">Open</span>
+        </div>
+        <div class="meta">
+          {{ job.companyName }} &middot; {{ job.location }} &middot; {{ job.salary }}
+        </div>
+        <div class="skill-tags">
+          <span class="skill-tag" *ngFor="let skill of job.skills">{{ skill }}</span>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<app-footer></app-footer>
+</div>

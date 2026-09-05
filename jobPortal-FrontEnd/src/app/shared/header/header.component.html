@@ -1,0 +1,52 @@
+<header class="topnav" [class.app]="variant !== 'guest'">
+  <div class="wrap">
+
+    <a routerLink="/" class="brand"><span class="brand-dot"></span>HireHub</a>
+
+    <!-- Guest nav -->
+    <nav class="nav-links" *ngIf="variant === 'guest'">
+      <a routerLink="/job/all-jobs">Find Jobs</a>
+      <a routerLink="/company/all-companies">Companies</a>
+    </nav>
+
+    <!-- Company nav -->
+    <nav class="nav-links app-links" *ngIf="variant === 'company'">
+      <a routerLink="../company-dashboard" routerLinkActive="active">Dashboard</a>
+      <a routerLink="../company-post-job" routerLinkActive="active">Post a Job</a>
+      <a routerLink="../company-manage-jobs" routerLinkActive="active">Manage Jobs</a>
+      <a routerLink="../company-applicants" routerLinkActive="active">Applicants</a>
+      <a routerLink="../profile-company" routerLinkActive="active">Company Profile</a>
+    </nav>
+
+    <!-- Seeker nav -->
+    <nav class="nav-links app-links" *ngIf="variant === 'seeker'">
+      <a routerLink="../jobseeker-dashboard" routerLinkActive="active">Dashboard</a>
+      <a routerLink="/job/all-jobs" routerLinkActive="active">Find Jobs</a>
+      <a routerLink="/application/jobseeker-applications" routerLinkActive="active">Applications</a>
+      <a routerLink="/job/saved-jobs" routerLinkActive="active">Saved</a>
+      <a routerLink="../profile-jobseeker" routerLinkActive="active">Profile</a>
+    </nav>
+
+    <!-- Admin nav -->
+    <nav class="nav-links app-links" *ngIf="variant === 'admin'">
+      <a routerLink="/admin/dashboard" routerLinkActive="active">Dashboard</a>
+      <a routerLink="/admin/jobseekers" routerLinkActive="active">Job Seekers</a>
+      <a routerLink="/admin/companies" routerLinkActive="active">Companies</a>
+      <a routerLink="/admin/jobs" routerLinkActive="active">Jobs</a>
+      <a routerLink="/admin/applications" routerLinkActive="active">Applications</a>
+    </nav>
+
+    <!-- Logged out actions (guest variant only) -->
+    <div class="nav-actions" *ngIf="variant === 'guest' && !isLoggedIn">
+      <a routerLink="/auth/login" class="btn btn-ghost-dark btn-sm">Log in</a>
+      <a routerLink="/auth/register" class="btn btn-primary btn-sm">Sign up</a>
+    </div>
+
+    <!-- Logged in actions (any variant) -->
+    <div class="nav-actions" *ngIf="isLoggedIn">
+      <a class="avatar" [routerLink]="profileRoute" *ngIf="initials">{{ initials }}</a>
+      <button class="btn btn-ghost-dark btn-sm" (click)="logout()">Logout</button>
+    </div>
+
+  </div>
+</header>

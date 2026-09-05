@@ -1,0 +1,35 @@
+<div class="page">
+<app-header variant="seeker"></app-header>
+<div class="app-shell">
+<app-sidebar variant="seeker"></app-sidebar>
+<main class="main">
+
+<div class="page-title">Saved Jobs</div>
+<div class="page-sub">{{totalSavedJobs}} roles you've bookmarked to apply to later.</div>
+<div class="table-wrap">
+  <table>
+    <thead>
+      <tr>
+        <th>Role</th>
+        <th>Company</th>
+        <th>Salary</th>
+        <th></th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr *ngFor="let job of savedJobs">
+        <td>{{job.jobTitle}}</td>
+        <td>{{job.companyName}}</td>
+        <td>&#8377;{{job.salary}}</td>
+        <td class="actions">
+          <a [routerLink]="['/job/view-job', job.jobId]">View</a>
+          <a class="danger" style="cursor:pointer;" (click)="removeSavedJob(job.jobId)">Remove</a>
+        </td>
+      </tr>
+    </tbody>
+  </table>
+</div>
+
+</main>
+</div>
+</div>
